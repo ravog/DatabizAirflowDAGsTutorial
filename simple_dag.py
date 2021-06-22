@@ -1,14 +1,7 @@
 """
-A maintenance workflow that you can deploy into Airflow to periodically clean
-out the task logs to avoid those getting too big.
-airflow trigger_dag --conf '[curly-braces]"maxLogAgeInDays":30[curly-braces]' airflow-log-cleanup
---conf options:
-    maxLogAgeInDays:<INT> - Optional
+DAG muy simple para el tutorial
 """
 from datetime import datetime, timedelta
-
-
-import jinja2
 from airflow.models import DAG
 from airflow.operators.dummy_operator import DummyOperator
 
@@ -26,8 +19,11 @@ default_args = {
 dag = DAG(
     'simple_dag',
     default_args=default_args,
-    schedule_interval=None,
+    schedule_interval=timedelta(hours=3),
     start_date=datetime(2021, 5, 9, 23, 45),
+    end_date=datetime(2021, 5, 10, 23, 45),
+    tags=['tutorial', 'radicaciones', 'tag'],
+    dagrun_timeout=timedelta(minutes=10)
 )
 if hasattr(dag, 'doc_md'):
     dag.doc_md = __doc__
